@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo da Memória - Reciclagem</title>
+    <link rel="stylesheet" href="style_jogo.css">
+</head>
+<body>
+    <h1>🌍 Jogo da Memória - Reciclagem ♻️</h1>
+    
+    <div class="legenda">
+        <h3>Cores das Lixeiras:</h3>
+        <ul>
+            <li><span style="color: #4CAF50;">●</span> Verde - Vidro</li>
+            <li><span style="color: #f44336;">●</span> Vermelho - Plástico</li>
+            <li><span style="color: #ffeb3b;">●</span> Amarelo - Metal</li>
+            <li><span style="color: #2196F3;">●</span> Azul - Papel</li>
+            <li><span style="color: #795548;">●</span> Marrom - Orgânico</li>
+            <li><span style="color: #ff9800;">●</span> Laranja - Resíduos Perigosos</li>
+        </ul>
+    </div>
+
+    <div class="game-info">
+        Tentativas: <span id="attempts">0</span> | Pontuação: <span id="score">0</span>
+    </div>
+    
+    <div class="game-board" id="gameBoard"></div>
+    
+    <button onclick="resetGame()">Novo Jogo</button>
+    <button onclick="goToMenu()">Voltar para o Menu</button> <!-- Novo botão de Voltar para o Menu -->
+    <button id="botaoMostrarRanking">Mostrar Ranking</button>
+
+
+    <!-- Modal para o ranking -->
+<div id="modalRanking" class="modal">
+    <div class="modal-content">
+        <h2>Ranking</h2>
+        <ul id="scoresList"></ul>
+        <button class="fechar-modal">Fechar</button>
+    </div>
+</div>
+
+
+    <!-- Modal para nome do jogador -->
+    <div id="nameModal" class="modal">
+        <div class="modal-content">
+            <h2>Parabéns!</h2>
+            <p>A sua pontuação foi de <span id="finalScore"></span> pontos!</p>
+            <form id="nameForm">
+                <input type="text" id="playerName" placeholder="Seu nome" required>
+                <button type="submit">Salvar Pontuação</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script_jogo.js"></script>
+</body>
+</html>

@@ -2,50 +2,47 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Jogo da Memória - Reciclagem</title>
-    <link rel="stylesheet" href="style_jogo.css">
+    <title>Menu - Jogo da Memória</title>
+    <link rel="stylesheet" href="style_menu.css">
 </head>
 <body>
-    <h1>🌍 Jogo da Memória - Reciclagem ♻️</h1>
-    
-    <div class="legenda">
-        <h3>Cores das Lixeiras:</h3>
-        <ul>
-            <li><span style="color: #4CAF50;">●</span> Verde - Vidro</li>
-            <li><span style="color: #f44336;">●</span> Vermelho - Plástico</li>
-            <li><span style="color: #ffeb3b;">●</span> Amarelo - Metal</li>
-            <li><span style="color: #2196F3;">●</span> Azul - Papel</li>
-            <li><span style="color: #795548;">●</span> Marrom - Orgânico</li>
-            <li><span style="color: #ff9800;">●</span> Laranja - Resíduos Perigosos</li>
-        </ul>
+    <div class="menu-container">
+        <img src="/assests/TITLE.png" alt="">
+        <h1>🎮 Jogo da Memória</h1>
+        <a href="jogo.html" class="menu-button">Jogar</a>
+        <button class="menu-button" onclick="showRanking()">Ranking</button>
+        <button class="menu-button" onclick="showCredits()">Créditos</button>
     </div>
 
-    <div class="scores-container" id="highscores">
-        <h3>Melhores Pontuações</h3>
-        <ul id="scoresList"></ul>
-    </div>
-
-    <div class="game-info">
-        Tentativas: <span id="attempts">0</span>
-    </div>
-    
-    <div class="game-board" id="gameBoard"></div>
-    
-    <button onclick="resetGame()">Novo Jogo</button>
-    <button onclick="goToMenu()">Voltar para o Menu</button> <!-- Novo botão de Voltar para o Menu -->
-
-    <!-- Modal para nome do jogador -->
-    <div id="nameModal" class="modal">
+    <div id="ranking-modal" class="modal">
         <div class="modal-content">
-            <h2>Parabéns!</h2>
-            <p>Você completou o jogo em <span id="finalScore"></span> tentativas!</p>
-            <form id="nameForm">
-                <input type="text" id="playerName" placeholder="Seu nome" required>
-                <button type="submit">Salvar Pontuação</button>
-            </form>
+            <span class="close-button" onclick="closeRanking()">&times;</span>
+            <h2>Ranking</h2>
+            <p id="loading-text">Carregando ranking...</p>
+            <ul id="ranking-list" class="ranking-list">
+                <!-- Aqui serão exibidas as pontuações carregadas -->
+            </ul>
+        </div>
+    </div>
+    
+    
+
+    <div id="credits-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeCredits()">&times;</span>
+            <h2>Créditos</h2>
+            <p><strong>Desenvolvido por:</strong> Eduardo Gonçalves | Camille Andrade | Pedro Dimas | Liander Souza</p>
+            <p><strong>Versão:</strong> 1.0</p>
+            <p><strong>Ano:</strong> 2025</p>
+            <p><strong>Agradecimentos especiais:</strong></p>
+            <ul>
+                <li>Todos os testadores</li>
+                <li>Comunidade de desenvolvedores</li>
+            </ul>
         </div>
     </div>
 
-    <script src="script_jogo.js"></script>
+    <script src="script_menu.js">
+    </script>
 </body>
 </html>

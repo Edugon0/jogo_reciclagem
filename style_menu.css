@@ -1,20 +1,19 @@
 body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-    font-family: Arial, sans-serif;
-    color: white;
+    background-image: url('/assests/parque.jpg'); /* Caminho para a imagem do fundo */
+    background-size: cover; /* Faz a imagem cobrir toda a tela */
+    background-position: center; /* Alinha a imagem ao centro da tela */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
+    color: white; /* Cor do texto, ajuste conforme necessário */
+    font-family: Arial, sans-serif; /* Fonte do corpo */
 }
 
 .menu-container {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 40px;
+    padding: 50px;
+    margin: 10px;
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 20px rgba(155, 154, 154, 0.3);
 }
 
 h1 {
