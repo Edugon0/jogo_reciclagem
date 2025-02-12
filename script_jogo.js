@@ -17,76 +17,31 @@ let cards = [];
 let flippedCards = [];
 let matchedPairs = 0;
 let attempts = 0;
-let score = 0; // Variável para armazenar a pontuação
-document.getElementById('botaoMostrarRanking').addEventListener('click', exibirRanking);
-
+let score = 0;
 
 function saveScore(name, score) {
-    // Salva a pontuação no localStorage ou na API
     atualizarRanking(name, score);
-    displayFinalScore(score);  // Exibe a pontuação final no modal
-    loadHighScores();  // Carrega os melhores rankings após salvar
+    displayFinalScore(score);
 }
-
-
-
-function loadHighScores() {
-    const dadosRanking = JSON.parse(localStorage.getItem('dadosRanking')) || [];
-    const scoresList = document.getElementById('scoresList');
-    scoresList.innerHTML = '';  // Limpar a lista antes de adicionar novos
-    
-    dadosRanking.forEach(score => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${score.nome}</span> <span>${score.pontuacao} pontos</span>`;
-        scoresList.appendChild(li);
-    });
-}
-
-function exibirRanking() {
-    const dadosRanking = JSON.parse(localStorage.getItem('dadosRanking')) || [];
-    const scoresList = document.getElementById('scoresList');
-    scoresList.innerHTML = '';  // Limpa a lista antes de adicionar novos
-    
-    // Adiciona cada pontuação ao ranking
-    dadosRanking.forEach(score => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${score.nome}</span> <span>${score.pontuacao} pontos</span>`;
-        scoresList.appendChild(li);
-    });
-
-    // Exibe o modal de ranking
-    document.getElementById('modalRanking').style.display = 'block';
-}
-
-
-// Event listener para fechar o modal
-document.querySelector('.fechar-modal').addEventListener('click', () => {
-    document.getElementById('modalRanking').style.display = 'none';
-});
-
 
 function displayFinalScore(score) {
-    // Atualiza o conteúdo da pontuação final no modal
     document.getElementById('finalScore').textContent = score;
-
-    // Exibe o modal com a pontuação final
     document.getElementById('nameModal').style.display = 'block';
 }
-
 
 document.getElementById('nameForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const name = document.getElementById('playerName').value;
-    await saveScore(name, score);  // Salva o nome e a pontuação
-    document.getElementById('nameModal').style.display = 'none';  // Fecha o modal de nome
-    resetGame();  // Reseta o jogo após salvar a pontuação
+    await saveScore(name, score);
+    document.getElementById('nameModal').style.display = 'none';
+    resetGame();
 });
 
 function resetGame() {
     flippedCards = [];
     matchedPairs = 0;
     attempts = 0;
-    score = matchedPairs * 10;  // Calcular a pontuação (10 pontos por par)
+    score = matchedPairs * 10;
     document.getElementById('attempts').textContent = attempts;
     document.getElementById('score').textContent = score;
     document.getElementById('nameModal').style.display = 'none';
@@ -97,17 +52,13 @@ function resetGame() {
 function atualizarRanking(nome, pontuacao) {
     let dadosRanking = JSON.parse(localStorage.getItem('dadosRanking')) || [];
     dadosRanking.push({ nome: nome, pontuacao: pontuacao });
-    // Ordenar os dados por pontuação decrescente
     dadosRanking.sort((a, b) => b.pontuacao - a.pontuacao);
-    // Manter apenas as 5 melhores pontuações
     if (dadosRanking.length > 5) {
         dadosRanking = dadosRanking.slice(0, 5);
     }
     localStorage.setItem('dadosRanking', JSON.stringify(dadosRanking));
 }
 
-
-// Função para manipular o acerto
 function checkMatch() {
     const [card1, card2] = flippedCards;
     const match = card1.item.cor === card2.item.cor;
@@ -116,13 +67,11 @@ function checkMatch() {
         card1.element.classList.add('matched');
         card2.element.classList.add('matched');
         matchedPairs++;
-        score += 10;  // Adiciona 10 pontos por par correspondente
-
-        document.getElementById('score').textContent = score;  // Atualiza a pontuação na tela
-        
+        score += 10;
+        document.getElementById('score').textContent = score;
         if (matchedPairs === items.length / 2) {
             setTimeout(() => {
-                displayFinalScore(score);  // Exibe a pontuação final quando o jogo acabar
+                displayFinalScore(score);
             }, 500);
         }
     } else {
@@ -133,58 +82,28 @@ function checkMatch() {
             card2.element.classList.remove('flipped', card2.item.classe);
         }, 1000);
     }
-
     flippedCards = [];
 }
 
-
-// Função para salvar a pontuação
 async function saveScore(name, score) {
     try {
-        // Enviar os dados para a API
         const response = await fetch('http://localhost:3000/api/scores', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, score }),
         });
-
-        // Se a resposta for bem-sucedida, carrega os dados
         if (response.ok) {
-            loadHighScores();  // Carregar o ranking atualizado
-            displayFinalScore(score);  // Exibir a pontuação final no modal
+            displayFinalScore(score);
         }
     } catch (error) {
         console.error('Erro ao salvar pontuação:', error);
     }
 }
 
-
-async function loadHighScores() {
-    try {
-        const response = await fetch('http://localhost:3000/api/scores');
-        const scores = await response.json();
-        
-        const scoresList = document.getElementById('scoresList');
-        scoresList.innerHTML = ''; // Limpar a lista antes de adicionar novos
-        
-        scores.forEach(score => {
-            const li = document.createElement('li');
-            li.innerHTML = `<span>${score.name}</span> <span>${score.score} pontos</span>`;
-            scoresList.appendChild(li);
-        });
-    } catch (error) {
-        console.error('Erro ao carregar pontuações:', error);
-    }
-}
-
-
 function createBoard() {
     const gameBoard = document.getElementById('gameBoard');
     gameBoard.innerHTML = '';
     const shuffledItems = [...items].sort(() => Math.random() - 0.5);
-
     cards = shuffledItems.map((item, index) => {
         const card = document.createElement('div');
         card.className = 'card';
@@ -193,12 +112,10 @@ function createBoard() {
         card.dataset.index = index;
         card.addEventListener('click', flipCard);
         gameBoard.appendChild(card);
-        return {
-            element: card,
-            item: item
-        };
+        return { element: card, item: item };
     });
 }
+
 
 // A cada 3 tentativas, desconta 0,5 pontos da pontuação
 function updateScore() {

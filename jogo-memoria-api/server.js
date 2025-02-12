@@ -1,14 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // Importe o pacote cors
+const cors = require('cors');
+
 const app = express();
 const port = 3000;
 
-// Use o middleware cors
+// Middleware
 app.use(cors());
-
-// Middleware para analisar o corpo das requisições em formato JSON
-app.use(bodyParser.json());
+app.use(express.json()); // Substitui bodyParser.json()
 
 let scores = [];
 
@@ -20,10 +18,21 @@ app.get('/api/scores', (req, res) => {
 // Rota para adicionar uma nova pontuação
 app.post('/api/scores', (req, res) => {
     const { name, score } = req.body;
-    scores.push({ name, score });
+
+    // Validação da entrada
+    if (!name || typeof name !== 'string' || !score || typeof score !== 'number') {
+        return res.status(400).json({ error: 'Nome ou pontuação inválidos' });
+    }
+
+    // Sanitização dos dados
+    const sanitizedScore = Math.max(0, score);
+    const sanitizedName = name.trim();
+
+    scores.push({ name: sanitizedName, score: sanitizedScore });
     scores.sort((a, b) => b.score - a.score); // Ordenar por pontuação decrescente
     scores = scores.slice(0, 5); // Manter apenas as 5 melhores pontuações
-    res.status(201).json({ message: 'Pontuação adicionada com sucesso!' });
+
+    res.sendStatus(201); // Responde apenas com o status
 });
 
 // Iniciar o servidor

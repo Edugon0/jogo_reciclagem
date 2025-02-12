@@ -1,6 +1,6 @@
 // Função para exibir o modal de Ranking
-function showRanking() {
-    loadHighScores();
+async function showRanking() {
+    await loadHighScores(); // Aguarda o carregamento antes de exibir
     document.getElementById('ranking-modal').style.display = 'block';
 }
 
@@ -16,19 +16,21 @@ async function loadHighScores() {
 
     try {
         const response = await fetch('http://localhost:3000/api/scores'); // Ajuste a URL conforme necessário
-        if (!response.ok) {
-            throw new Error('Erro ao carregar ranking');
-        }
+        if (!response.ok) throw new Error('Erro ao carregar ranking');
 
         const dadosRanking = await response.json();
         console.log("Dados recebidos da API:", dadosRanking);
 
-
         rankingList.innerHTML = ''; // Limpa a mensagem de carregamento
+
+        if (dadosRanking.length === 0) {
+            rankingList.innerHTML = '<li>Nenhuma pontuação disponível.</li>';
+            return;
+        }
 
         dadosRanking.forEach(score => {
             const li = document.createElement('li');
-            li.innerHTML = `${score.nome || score.player} - ${score.pontuacao || score.points || score.score || '0'} pontos`;
+            li.textContent = `${score.name} - ${score.score} pontos`;
             rankingList.appendChild(li);
         });
     } catch (error) {
@@ -36,7 +38,6 @@ async function loadHighScores() {
         rankingList.innerHTML = '<li>Erro ao carregar ranking.</li>';
     }
 }
-
 
 // Função para exibir o modal de Créditos
 function showCredits() {
@@ -53,11 +54,6 @@ window.onclick = function(event) {
     const rankingModal = document.getElementById('ranking-modal');
     const creditsModal = document.getElementById('credits-modal');
 
-    if (event.target === rankingModal) {
-        rankingModal.style.display = 'none';
-    }
-
-    if (event.target === creditsModal) {
-        creditsModal.style.display = 'none';
-    }
+    if (event.target === rankingModal) closeRanking();
+    if (event.target === creditsModal) closeCredits();
 };
