@@ -1,6 +1,6 @@
 // Função para exibir o modal de Ranking
-async function showRanking() {
-    await loadHighScores(); // Aguarda o carregamento antes de exibir
+function showRanking() {
+    loadHighScores(); // Carrega as pontuações do localStorage
     document.getElementById('ranking-modal').style.display = 'block';
 }
 
@@ -9,33 +9,58 @@ function closeRanking() {
     document.getElementById('ranking-modal').style.display = 'none';
 }
 
-// Função para carregar as melhores pontuações da API
-async function loadHighScores() {
+// Função para carregar as melhores pontuações do localStorage
+function loadHighScores() {
     const rankingList = document.getElementById('ranking-list');
-    rankingList.innerHTML = '<li>Carregando ranking...</li>'; // Mensagem temporária
-
+    rankingList.innerHTML = '<li>Carregando ranking...</li>';
+    
     try {
-        const response = await fetch('http://localhost:3000/api/scores'); // Ajuste a URL conforme necessário
-        if (!response.ok) throw new Error('Erro ao carregar ranking');
-
-        const dadosRanking = await response.json();
-        console.log("Dados recebidos da API:", dadosRanking);
-
+        // Recupera as pontuações do localStorage
+        const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+        
         rankingList.innerHTML = ''; // Limpa a mensagem de carregamento
-
-        if (dadosRanking.length === 0) {
-            rankingList.innerHTML = '<li>Nenhuma pontuação disponível.</li>';
+        
+        if (highScores.length === 0) {
+            rankingList.innerHTML = '<li class="ranking-item">Nenhuma pontuação disponível.</li>';
             return;
         }
-
-        dadosRanking.forEach(score => {
-            const li = document.createElement('li');
-            li.textContent = `${score.name} - ${score.score} pontos`;
-            rankingList.appendChild(li);
+        
+        // Criar tabela de ranking
+        const table = document.createElement('table');
+        table.className = 'ranking-table';
+        
+        // Criar cabeçalho da tabela
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>Posição</th>
+                <th>Nome</th>
+                <th>Pontuação</th>
+                <th>Data</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+        
+        // Criar corpo da tabela
+        const tbody = document.createElement('tbody');
+        highScores.forEach((score, index) => {
+            const row = document.createElement('tr');
+            const date = new Date(score.date).toLocaleDateString();
+            row.innerHTML = `
+                <td>${index + 1}º</td>
+                <td>${score.name}</td>
+                <td>${score.score} pontos</td>
+                <td>${date}</td>
+            `;
+            tbody.appendChild(row);
         });
+        
+        table.appendChild(tbody);
+        rankingList.appendChild(table);
+        
     } catch (error) {
-        console.error(error);
-        rankingList.innerHTML = '<li>Erro ao carregar ranking.</li>';
+        console.error('Erro ao carregar ranking:', error);
+        rankingList.innerHTML = '<li class="ranking-item">Erro ao carregar ranking.</li>';
     }
 }
 
@@ -49,11 +74,10 @@ function closeCredits() {
     document.getElementById('credits-modal').style.display = 'none';
 }
 
-// Fechar modal de créditos ou ranking ao clicar fora deles
+// Fechar modais ao clicar fora deles
 window.onclick = function(event) {
     const rankingModal = document.getElementById('ranking-modal');
     const creditsModal = document.getElementById('credits-modal');
-
     if (event.target === rankingModal) closeRanking();
     if (event.target === creditsModal) closeCredits();
 };
