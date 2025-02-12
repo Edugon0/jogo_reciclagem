@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Jogo da Memória - Reciclagem</title>
-    <link rel="stylesheet" href="style_jogo.css">
+    <link rel="stylesheet" href="styles/style_jogo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
     <h1>🌍 Jogo da Memória - Reciclagem ♻️</h1>
-    
+
     <div class="legenda">
+
+        <div class="button voltar">
+            <a onclick="goToMenu()"><i class="fa-solid fa-chevron-left"></i></a> <!-- Novo botão de Voltar para o Menu -->
+        </div>
+
         <h3>Cores das Lixeiras:</h3>
         <ul>
             <li><span style="color: #4CAF50;">●</span> Verde - Vidro</li>
@@ -23,13 +36,12 @@
     <div class="game-info">
         Tentativas: <span id="attempts">0</span> | Pontuação: <span id="score">0</span>
     </div>
-    
+
     <div class="game-board" id="gameBoard"></div>
-    
-    <button onclick="resetGame()">Novo Jogo</button>
-    <button onclick="goToMenu()">Voltar para o Menu</button> <!-- Novo botão de Voltar para o Menu -->
 
-
+    <div class="button">
+        <a onclick="resetGame()">Novo Jogo</a>
+    </div>
     <!-- Modal para nome do jogador -->
     <div id="nameModal" class="modal">
         <div class="modal-content">
@@ -42,6 +54,7 @@
         </div>
     </div>
 
-    <script src="script_jogo.js"></script>
+    <script src="js/script_jogo.js"></script>
 </body>
+
 </html>

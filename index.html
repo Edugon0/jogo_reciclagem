@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Menu - Jogo da Memória</title>
-    <link rel="stylesheet" href="style_menu.css">
+    <link rel="stylesheet" href="styles/style_menu.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="menu-container">
         <img src="/assests/TITLE.png" alt="">
         <h1>🎮 Jogo da Memória</h1>
-        <a href="jogo.html" class="menu-button">Jogar</a>
-        <button class="menu-button" onclick="showRanking()">Ranking</button>
-        <button class="menu-button" onclick="showCredits()">Créditos</button>
+
+        <div class="buttons">
+            <div class="button">
+                <a href="jogo.html">Jogar</a>
+            </div>
+            <div class="button">
+                <a onclick="showCredits()">Créditos</a>
+            </div>
+            <div class="button">
+                <a  onclick="showRanking()">Ranking</a>
+            </div>
+        </div>
     </div>
 
     <div id="ranking-modal" class="modal">
@@ -24,8 +38,6 @@
             </ul>
         </div>
     </div>
-    
-    
 
     <div id="credits-modal" class="modal">
         <div class="modal-content">
@@ -42,7 +54,8 @@
         </div>
     </div>
 
-    <script src="script_menu.js">
+    <script src="js/script_menu.js">
     </script>
 </body>
+
 </html>
