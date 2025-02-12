@@ -1,0 +1,154 @@
+body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+        }
+
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .game-info {
+            margin: 20px;
+            font-size: 1.2em;
+            color: #1b5e20;
+        }
+
+        .legenda {
+            margin: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .legenda h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+
+        .legenda ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .legenda li {
+            margin: 10px 0;
+            padding: 5px;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .card {
+            width: 150px;
+            height: 150px;
+            background-color: #81c784;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            cursor: default;
+            box-shadow: 0 0 15px rgba(46, 125, 50, 0.5);
+        }
+
+        .verde { background-color: #4CAF50; }
+        .vermelho { background-color: #f44336; }
+        .amarelo { background-color: #ffeb3b; color: #333; }
+        .azul { background-color: #2196F3; }
+        .marrom { background-color: #795548; }
+        .laranja { background-color: #ff9800; }
+
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1b5e20;
+        }
+
+        /* Novos estilos para o sistema de pontuação */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 300px;
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        #nameForm input {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #scoresList li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 15px;
+            margin: 5px 0;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .scores-container {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 300px;
+        }
+
+        .scores-container h3 {
+            color: #2e7d32;
+            margin-top: 0;
+        }

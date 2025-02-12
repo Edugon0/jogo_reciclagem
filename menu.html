@@ -3,92 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Menu - Jogo da Memória</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            font-family: Arial, sans-serif;
-            color: white;
-        }
-
-        .menu-container {
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .menu-button {
-            display: block;
-            width: 200px;
-            padding: 15px;
-            margin: 15px auto;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            text-decoration: none;
-        }
-
-        .menu-button:hover {
-            transform: scale(1.05);
-            background-color: #45a049;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .modal-content {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.9);
-            margin: 15% auto;
-            padding: 20px;
-            width: 70%;
-            max-width: 500px;
-            border-radius: 10px;
-            color: #333;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .close-button:hover {
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="style_menu.css">
 </head>
 <body>
     <div class="menu-container">
-        <h1>🎮 Operação reciclagem - Jogo da memoria</h1>
+        <img src="/assests/TITLE.png" alt="">
+        <h1>🎮 Jogo da Memória</h1>
         <a href="index.html" class="menu-button">Jogar</a>
+        <button class="menu-button" onclick="showRanking()">Ranking</button>
         <button class="menu-button" onclick="showCredits()">Créditos</button>
+    </div>
+
+    <div id="ranking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeRanking()">&times;</span>
+            <h2>Ranking</h2>
+            <ul id="ranking-list" class="ranking-list"></ul>
+        </div>
     </div>
 
     <div id="credits-modal" class="modal">
@@ -106,22 +37,7 @@
         </div>
     </div>
 
-    <script>
-        function showCredits() {
-            document.getElementById('credits-modal').style.display = 'block';
-        }
-
-        function closeCredits() {
-            document.getElementById('credits-modal').style.display = 'none';
-        }
-
-        // Fechar modal de créditos ao clicar fora dele
-        window.onclick = function(event) {
-            let modal = document.getElementById('credits-modal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
+    <script src="script_menu.js">
     </script>
 </body>
 </html>

@@ -3,107 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Jogo da Memória - Reciclagem</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #e8f5e9;
-        }
-
-        h1 {
-            color: #2e7d32;
-            text-align: center;
-            margin: 20px;
-        }
-
-        .game-info {
-            margin: 20px;
-            font-size: 1.2em;
-            color: #1b5e20;
-        }
-
-        .legenda {
-            margin: 20px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .legenda h3 {
-            margin-top: 0;
-            color: #2e7d32;
-        }
-
-        .legenda ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .legenda li {
-            margin: 10px 0;
-            padding: 5px;
-        }
-
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 800px;
-            padding: 20px;
-        }
-
-        .card {
-            width: 150px;
-            height: 150px;
-            background-color: #81c784;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.3s;
-            transform-style: preserve-3d;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card.matched {
-            cursor: default;
-            box-shadow: 0 0 15px rgba(46, 125, 50, 0.5);
-        }
-
-        .verde { background-color: #4CAF50; }
-        .vermelho { background-color: #f44336; }
-        .amarelo { background-color: #ffeb3b; color: #333; }
-        .azul { background-color: #2196F3; }
-        .marrom { background-color: #795548; }
-        .laranja { background-color: #ff9800; }
-
-        button {
-            margin: 20px;
-            padding: 10px 20px;
-            font-size: 1.1em;
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #1b5e20;
-        }
-    </style>
+    <link rel="stylesheet" href="style_jogo.css">
 </head>
 <body>
     <h1>🌍 Jogo da Memória - Reciclagem ♻️</h1>
@@ -120,6 +20,11 @@
         </ul>
     </div>
 
+    <div class="scores-container" id="highscores">
+        <h3>Melhores Pontuações</h3>
+        <ul id="scoresList"></ul>
+    </div>
+
     <div class="game-info">
         Tentativas: <span id="attempts">0</span>
     </div>
@@ -127,106 +32,20 @@
     <div class="game-board" id="gameBoard"></div>
     
     <button onclick="resetGame()">Novo Jogo</button>
+    <button onclick="goToMenu()">Voltar para o Menu</button> <!-- Novo botão de Voltar para o Menu -->
 
-    <script>
-        const items = [
-            { tipo: 'lixeira', cor: 'verde', emoji: '🗑️', classe: 'verde' },
-            { tipo: 'item', cor: 'verde', emoji: '🍾', classe: 'verde' },
-            { tipo: 'lixeira', cor: 'vermelho', emoji: '🗑️', classe: 'vermelho' },
-            { tipo: 'item', cor: 'vermelho', emoji: '🥤', classe: 'vermelho' },
-            { tipo: 'lixeira', cor: 'amarelo', emoji: '🗑️', classe: 'amarelo' },
-            { tipo: 'item', cor: 'amarelo', emoji: '🥫', classe: 'amarelo' },
-            { tipo: 'lixeira', cor: 'azul', emoji: '🗑️', classe: 'azul' },
-            { tipo: 'item', cor: 'azul', emoji: '📰', classe: 'azul' },
-            { tipo: 'lixeira', cor: 'marrom', emoji: '🗑️', classe: 'marrom' },
-            { tipo: 'item', cor: 'marrom', emoji: '🍎', classe: 'marrom' },
-            { tipo: 'lixeira', cor: 'laranja', emoji: '🗑️', classe: 'laranja' },
-            { tipo: 'item', cor: 'laranja', emoji: '🔋', classe: 'laranja' }
-        ];
+    <!-- Modal para nome do jogador -->
+    <div id="nameModal" class="modal">
+        <div class="modal-content">
+            <h2>Parabéns!</h2>
+            <p>Você completou o jogo em <span id="finalScore"></span> tentativas!</p>
+            <form id="nameForm">
+                <input type="text" id="playerName" placeholder="Seu nome" required>
+                <button type="submit">Salvar Pontuação</button>
+            </form>
+        </div>
+    </div>
 
-        let cards = [];
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let attempts = 0;
-
-        function createBoard() {
-            const gameBoard = document.getElementById('gameBoard');
-            gameBoard.innerHTML = '';
-            const shuffledItems = [...items].sort(() => Math.random() - 0.5);
-
-            cards = shuffledItems.map((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.dataset.color = item.cor;
-                card.dataset.tipo = item.tipo;
-                card.dataset.index = index;
-                card.addEventListener('click', flipCard);
-                gameBoard.appendChild(card);
-                return {
-                    element: card,
-                    item: item
-                };
-            });
-        }
-
-        function flipCard() {
-            const cardObj = cards.find(c => c.element === this);
-            
-            if (
-                flippedCards.length === 2 ||
-                flippedCards.includes(cardObj) ||
-                this.classList.contains('matched')
-            ) {
-                return;
-            }
-
-            this.textContent = cardObj.item.emoji;
-            this.classList.add('flipped', cardObj.item.classe);
-            flippedCards.push(cardObj);
-
-            if (flippedCards.length === 2) {
-                attempts++;
-                document.getElementById('attempts').textContent = attempts;
-                checkMatch();
-            }
-        }
-
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            const match = card1.item.cor === card2.item.cor;
-
-            if (match) {
-                card1.element.classList.add('matched');
-                card2.element.classList.add('matched');
-                matchedPairs++;
-
-                if (matchedPairs === items.length / 2) {
-                    setTimeout(() => {
-                        alert(`Parabéns! Você completou o jogo em ${attempts} tentativas!`);
-                    }, 500);
-                }
-            } else {
-                setTimeout(() => {
-                    card1.element.textContent = '';
-                    card2.element.textContent = '';
-                    card1.element.classList.remove('flipped', card1.item.classe);
-                    card2.element.classList.remove('flipped', card2.item.classe);
-                }, 1000);
-            }
-
-            flippedCards = [];
-        }
-
-        function resetGame() {
-            flippedCards = [];
-            matchedPairs = 0;
-            attempts = 0;
-            document.getElementById('attempts').textContent = attempts;
-            createBoard();
-        }
-
-        // Iniciar o jogo
-        createBoard();
-    </script>
+    <script src="script_jogo.js"></script>
 </body>
 </html>
