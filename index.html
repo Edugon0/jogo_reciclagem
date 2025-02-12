@@ -11,10 +11,11 @@
 </head>
 
 <body>
+   
     <div class="menu-container">
-        <img src="/assests/TITLE.png" alt="">
+        <button id="sound-button" onclick="toggleSound()">🔊</button>
+        <img src="/assests/TITLE.png" alt="" class="pulsando">
         <h1>🎮 Jogo da Memória</h1>
-
         <div class="buttons">
             <div class="button">
                 <a href="jogo.html">Jogar</a>
@@ -23,9 +24,10 @@
                 <a onclick="showCredits()">Créditos</a>
             </div>
             <div class="button">
-                <a  onclick="showRanking()">Ranking</a>
+                <a onclick="showRanking()">Ranking</a>
             </div>
         </div>
+    
     </div>
 
     <div id="ranking-modal" class="modal">
@@ -34,28 +36,51 @@
             <h2>Ranking</h2>
             <p id="loading-text">Carregando ranking...</p>
             <ul id="ranking-list" class="ranking-list">
-                <!-- Aqui serão exibidas as pontuações carregadas -->
+               
             </ul>
         </div>
     </div>
+
 
     <div id="credits-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeCredits()">&times;</span>
-            <h2>Créditos</h2>
-            <p><strong>Desenvolvido por:</strong> Eduardo Gonçalves | Camille Andrade | Pedro Dimas | Liander Souza</p>
-            <p><strong>Versão:</strong> 1.0</p>
-            <p><strong>Ano:</strong> 2025</p>
-            <p><strong>Agradecimentos especiais:</strong></p>
+            <h2>Desenvolvedores</h2>
+            
+            <div class="credits-container">
+                <div class="credit-card">
+                    <p>Camille Andrade</p>
+                    <p>Frontend</p>
+                </div>
+                <div class="credit-card">
+                    <p>Eduardo Victor</p>
+                    <p>Backend</p>
+                </div>
+                <div class="credit-card">
+                    <p>Liander Souza</p>
+                    <p>Frontend</p>
+                </div>
+                <div class="credit-card">
+                    <p>Pedro Dimas</p>
+                    <p>Backend</p>
+                </div>
+            </div>
+
+            <h3>Agradecimentos:</h3>
             <ul>
-                <li>Todos os testadores</li>
-                <li>Comunidade de desenvolvedores</li>
+                <li>Equipe Desenvolvedora</li>
+                <li>IFPA Campus Ananindeua</li>
+        
             </ul>
         </div>
     </div>
 
-    <script src="js/script_menu.js">
-    </script>
+
+    <audio id="background-music" loop>
+        <source src="assests/som/SomFundo.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="js/script.som.js"></script>
+    <script src="js/script_menu.js"></script>
 </body>
 
 </html>

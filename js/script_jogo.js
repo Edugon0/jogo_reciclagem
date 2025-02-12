@@ -19,71 +19,46 @@ let matchedPairs = 0;
 let attempts = 0;
 let score = 0;
 
-function saveScore(name, score) {
-    atualizarRanking(name, score);
-    displayFinalScore(score);
+// Função para tocar música de fundo
+function startBackgroundMusic() {
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    backgroundMusic.play(); // Começa a música
 }
 
-function displayFinalScore(score) {
-    document.getElementById('finalScore').textContent = score;
+// Função para parar música de fundo
+function stopBackgroundMusic() {
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    backgroundMusic.pause(); // Para a música
+    backgroundMusic.currentTime = 0; // Reseta a música para o início
+}
+
+// Função para exibir confetes
+function showConfetti() {
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+}
+
+// Função para quando o jogo for completado
+function gameCompleted() {
+    const score = document.getElementById('score').textContent; // Pontuação do jogador
+    const finalScoreElement = document.getElementById('finalScore');
+    finalScoreElement.textContent = score; // Atualiza a pontuação no modal
+
     document.getElementById('nameModal').style.display = 'block';
+
+    showConfetti(); // Confetes chamados junto com o modal
 }
 
-document.getElementById('nameForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const name = document.getElementById('playerName').value;
-    await saveScore(name, score);
-    document.getElementById('nameModal').style.display = 'none';
-    resetGame();
-});
 
-function resetGame() {
-    flippedCards = [];
-    matchedPairs = 0;
-    attempts = 0;
-    score = matchedPairs * 10;
-    document.getElementById('attempts').textContent = attempts;
-    document.getElementById('score').textContent = score;
-    document.getElementById('nameModal').style.display = 'none';
-    document.getElementById('playerName').value = '';
-    createBoard();
-}
-
-function atualizarRanking(nome, pontuacao) {
-    let dadosRanking = JSON.parse(localStorage.getItem('dadosRanking')) || [];
-    dadosRanking.push({ nome: nome, pontuacao: pontuacao });
-    dadosRanking.sort((a, b) => b.pontuacao - a.pontuacao);
-    if (dadosRanking.length > 5) {
-        dadosRanking = dadosRanking.slice(0, 5);
+function checkGameCompletion() {
+    if (matchedPairs === items.length / 2) { 
+        gameCompleted();
     }
-    localStorage.setItem('dadosRanking', JSON.stringify(dadosRanking));
 }
 
-function checkMatch() {
-    const [card1, card2] = flippedCards;
-    const match = card1.item.cor === card2.item.cor;
-
-    if (match) {
-        card1.element.classList.add('matched');
-        card2.element.classList.add('matched');
-        matchedPairs++;
-        score += 10;
-        document.getElementById('score').textContent = score;
-        if (matchedPairs === items.length / 2) {
-            setTimeout(() => {
-                displayFinalScore(score);
-            }, 500);
-        }
-    } else {
-        setTimeout(() => {
-            card1.element.textContent = '';
-            card2.element.textContent = '';
-            card1.element.classList.remove('flipped', card1.item.classe);
-            card2.element.classList.remove('flipped', card2.item.classe);
-        }, 1000);
-    }
-    flippedCards = [];
-}
 
 async function saveScore(name, score) {
     try {
@@ -99,6 +74,13 @@ async function saveScore(name, score) {
         console.error('Erro ao salvar pontuação:', error);
     }
 }
+
+
+function displayFinalScore(score) {
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('nameModal').style.display = 'block';
+}
+
 
 function createBoard() {
     const gameBoard = document.getElementById('gameBoard');
@@ -116,18 +98,45 @@ function createBoard() {
     });
 }
 
+function resetGame() {
+    flippedCards = [];
+    matchedPairs = 0;
+    attempts = 0;
+    score = 0;
 
-// A cada 3 tentativas, desconta 0,5 pontos da pontuação
-function updateScore() {
-    // A cada 3 tentativas, desconta 0,5 pontos
-    if (attempts % 3 === 0 && attempts !== 0) {
-        score -= 0.5;
-    }
-
-    // Atualiza a pontuação na tela
+    document.getElementById('attempts').textContent = attempts;
     document.getElementById('score').textContent = score;
+    document.getElementById('nameModal').style.display = 'none';
+    document.getElementById('playerName').value = '';
+    setTimeout(createBoard, 300); // Garante que a UI é resetada antes de criar novo tabuleiro
+    stopBackgroundMusic(); // Para a música de fundo
+    startBackgroundMusic(); // Reinicia a música de fundo
 }
 
+// Função para verificar se houve correspondência de cartas
+function checkMatch() {
+    const [card1, card2] = flippedCards;
+    const match = card1.item.cor === card2.item.cor;
+
+    if (match) {
+        card1.element.classList.add('matched');
+        card2.element.classList.add('matched');
+        matchedPairs++;
+        score += 10;
+        document.getElementById('score').textContent = score;
+        checkGameCompletion(); // Verifica se o jogo foi completado após essa correspondência
+    } else {
+        setTimeout(() => {
+            card1.element.textContent = '';
+            card2.element.textContent = '';
+            card1.element.classList.remove('flipped', card1.item.classe);
+            card2.element.classList.remove('flipped', card2.item.classe);
+        }, 1000);
+    }
+    flippedCards = [];
+}
+
+// Função para virar as cartas
 function flipCard() {
     if (flippedCards.length === 2) return; // Impede virar mais de 2 cartas ao mesmo tempo
 
@@ -143,78 +152,27 @@ function flipCard() {
     if (flippedCards.length === 2) {
         attempts++;
         document.getElementById('attempts').textContent = attempts;
-        updateScore(); // Atualiza a pontuação
         setTimeout(checkMatch, 800); // Espera 800ms para verificar correspondência
     }
-}
-
-
-
-function checkMatch() {
-    const [card1, card2] = flippedCards;
-
-    if (card1.item.cor === card2.item.cor) {
-        card1.element.classList.add('matched');
-        card2.element.classList.add('matched');
-        matchedPairs++;
-
-        // Adiciona pontos ao score
-        score += 10;
-        document.getElementById('score').textContent = score;
-
-        // Se todos os pares foram encontrados, exibe o modal de pontuação final
-        if (matchedPairs === items.length / 2) {
-            setTimeout(() => {
-                document.getElementById('finalScore').textContent = score;
-                document.getElementById('nameModal').style.display = 'block';
-            }, 500);
-        }
-    } else {
-        setTimeout(() => {
-            card1.element.textContent = '';
-            card2.element.textContent = '';
-            card1.element.classList.remove('flipped', card1.item.classe);
-            card2.element.classList.remove('flipped', card2.item.classe);
-        }, 1000);
-    }
-
-    flippedCards = []; // Reseta a lista de cartas viradas
-}
-
-
-function resetGame() {
-    flippedCards = [];
-    matchedPairs = 0;
-    attempts = 0;
-    score = 0;
-
-    document.getElementById('attempts').textContent = attempts;
-    document.getElementById('score').textContent = score;
-    document.getElementById('nameModal').style.display = 'none';
-    document.getElementById('playerName').value = '';
-
-    setTimeout(createBoard, 300); // Garante que a UI é resetada antes de criar novo tabuleiro
-}
-
-
-function goToMenu() {
-    // Aqui você pode definir a lógica para voltar ao menu principal.
-    // Por exemplo, redirecionar para outra página ou mostrar/ocultar elementos.
-    window.location.href = 'index.html'; // Exemplo de redirecionamento para outra página
 }
 
 // Event listener para o formulário de nome
 document.getElementById('nameForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const name = document.getElementById('playerName').value;
-    await saveScore(name, score); // Envia a pontuação final
+    await saveScore(name, score);
     document.getElementById('nameModal').style.display = 'none';
     resetGame();
 });
 
-// Carregar pontuações ao iniciar o jogo
-loadHighScores();
+// Função para voltar ao menu
+function goToMenu() {
+    // Aqui, você pode definir o comportamento do botão voltar. Por exemplo:
+    window.location.href = 'index.html'; // Substitua 'menu.html' pela sua página de menu
+}
 
-// Iniciar o jogo
-createBoard();
- 
+// Event listener para o botão de voltar
+document.querySelector('.button.voltar a').addEventListener('click', goToMenu);
+
+// Iniciar o jogo e tocar música de fundo
+startBackgroundMusic();
