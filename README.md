@@ -2,7 +2,7 @@ Operação Reciclagem ♻️🧠
 
 Bem-vindo ao Operação Reciclagem, o jogo da memória que vai desafiar suas habilidades enquanto você aprende sobre como descartar o lixo corretamente! 🌍✨
 
-Acesse o link e jogue
+Acesse o link e jogue: https://operacaoreciclagem.netlify.app/index.html
 
 🎯 Sobre o Jogo
 
