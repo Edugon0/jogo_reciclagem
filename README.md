@@ -4,6 +4,8 @@ Bem-vindo ao Operação Reciclagem, o jogo da memória que vai desafiar suas hab
 
 Acesse o link e jogue: https://operacaoreciclagem.netlify.app/index.html
 
+Acesse o link para assistir o vídeo: https://www.youtube.com/watch?v=kM_s0DGlo04
+
 🎯 Sobre o Jogo
 
 Você está pronto para ser um herói ecológico? Em Operação Reciclagem, sua missão é combinar materiais recicláveis com suas respectivas lixeiras de forma rápida e eficiente. Mas atenção! O tempo e o número de tentativas contam pontos, então a velocidade e a precisão são fundamentais! O jogo consiste em um jogo da memória onde você terá que combinar pares de cartas:
